@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+			<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<script src="/js/jquery_min.js" type="text/javascript"></script>
+<script language="javascript">
+    //    friendform  user_search  search_form site_search googleform site_search_gg searchform_brd board_search
+    function searchByType(){
+        var type=$('#selType').val();
+        var info=$('#schInfo').val();
+        if(info.length<1){
+            alert("请输入关键字");
+            return;
+        }
+        if(type=="site"){
+            $("#site_search").attr('value',info);
+            document.searchform.submit();
+        }else if(type=="board"){
+            $("#board_search").attr('value',info);
+            document.searchform_brd.submit();
+        }else if(type=="news"){
+            if(info.length<2){
+                alert('请至少输入两个字');
+                return;
+            }else{
+                $("#news_search").attr('value',info);
+            }
+            document.searchform_kws.submit();
+        }else if(type=="friend"){
+            $("#user_search").attr('value',info);
+            document.friendform.submit();
+        }else if(type=="friend_name"){
+            $("#username_search").attr('value',info);
+            document.friendnameform.submit();
+        }
+        return;
+    }
+    function keyEvent(event){
+        // 判断回车键是否按下
+        if(!event)
+            event = window.event;//火狐中是 window.event
+        if((event.keyCode || event.which) != 13)
+            return true;
+
+        searchByType();
+    }
+
+
+function getCookieHeader(name) {
+	var arr = document.cookie.split("; ");
+	var length = arr.length;
+	var a;
+	for (var i=0; i < length; i++) {
+		a = arr[i].split("=");
+		if (a[0].toLowerCase() == name.toLowerCase()) {
+			return a[1];
+		}
+	}
+
+	return "";
+}
+function GetUrl()
+{
+      str=window.location.pathname;
+      if(str==null)
+      {
+          var url = '/mwap';
+      }
+      else {
+          var arr = new Array();
+          arr = str.split("/");
+          var url = '/mwap';
+          if (arr.length == 1) {
+              url = '/mwap';
+          }
+          if(arr.length==2) {
+              if (arr[1] == "mitbbs_bbssec.php") {
+                  url = '/mwap/forum/index.php';
+              }
+              else if(arr[1]=="mitbbs_article.php"){
+                  if(!GetQueryString("opflag")) {
+                      var board = GetQueryString("board");
+                      var id = GetQueryString("id");
+                      url = '/mwap/articlesingle.php?board='+board+'&article_id='+id;
+                  }
+                  else{
+                      var board = GetQueryString("board");
+                      var id = GetQueryString("id");
+                      url = '/mwap/articlesingle.php?club='+board+'&article_id='+id;
+                  }
+              }
+              else if(arr[1]=="mitbbs_article_t.php"){
+                  if(!GetQueryString("opflag")) {
+                      var board = GetQueryString("board");
+                      var gid = GetQueryString("gid");
+                      url = '/mwap/forum/article.php?board=' + board + '&groupid=' + gid + '&content_type=all';
+                  }
+                  else{
+                      var board = GetQueryString("board");
+                      var gid = GetQueryString("gid");
+                      url = '/mwap/club/article.php?club=' + board + '&groupid=' + gid + '&content_type=all';
+                  }
+              }
+              else if(arr[1]=="mitbbs_bbsdoc.php"){
+                  var board = GetQueryString("board");
+                  url = '/mwap/forum/board.php?board=' + board;
+              }
+              else if(arr[1]=="mitbbs_bbsboa.php"){
+                  var group = GetQueryString("group");
+                  url = '/mwap/forum/boardlist.php?sectid=' + group + '&boardname=0';
+              }
+              else if(arr[1]=="mitbbs_my_article.php"){
+                  url='/mwap/home/articlelist.php';
+              }
+              else if(arr[1]=="mitbbs_favorite_boards.php"){
+                  url='/mwap/home/discuss.php';
+              }
+              else if(arr[1]=="mitbbs_bbsfriendinfo.php"){
+                  url='/mwap/home/friends.php';
+              }
+              else if(arr[1]=="mitbbs_badlist.php"){
+                  url='/mwap/home/blacklist.php';
+              }
+              else if(arr[1]=="mitbbs_mailbox.php"){
+                  url='/mwap/home/mails.php';
+              }
+          }
+          if (arr.length == 3) {
+              if (arr[1] == "yimin") {
+                  if(arr[2]=="ym_wzy.php"){
+                      var board = GetQueryString("board");
+                      var id = GetQueryString("id");
+                      url = '/mwap/immigration/article.php?reqtype=column&board=' + board + '&groupid=' +id;
+                  }
+                  else{
+                      url = '/mwap/immigration';
+                  }
+              }
+              else if (arr[1] == "news") {
+                  if(arr[2]=="mitbbs_news_wenzhang.php")
+                  {
+                      var board = GetQueryString("board");
+                      var id = GetQueryString("id");
+                      alert(board);
+                      url = '/mwap/news/article.php?news='+board+'&groupid='+id;
+                  }
+                  else if(arr[2]=="mitbbs_news_pg.php"){
+                      url = '/mwap/news';
+                  }
+                  else {
+                      url = '/mwap/news';
+                  }
+              }
+              else if(arr[1]=="news_pg"){
+                  url = '/mwap/news';
+
+              }
+              else if (arr[1] == "club") {
+				  go_img
+                  if(arr[2]=="mitbbs_club_bbsdoc.php"){
+                      var club=GetQueryString("club");
+                      url='/mwap/club/club.php?club='+club;
+                  }
+                  else if(arr[2]=="mitbbs_club_myclub.php"){
+                      url='/mwap/home/club.php';
+                  }
+                  else{
+                      url = '/mwap/club';
+                  }
+              }
+              else if (arr[1] == "bbsdoc") {
+                  var arr1 = new Array();
+                  arr1 = arr[2].split(".");
+                  url = '/mwap/forum/board.php?board=' + arr1[0];
+              }
+              else if (arr[1] == "bbsboa") {
+                  var arr1 = new Array();
+                  arr1 = arr[2].split(".");
+                  arr1[0]++;
+                  url = '/mwap/forum/boardlist.php?sectid=' + arr1[0] + '&boardname=0';
+              }
+              else  if(arr[1]=="club_bbsdoc"){
+                  var arr1 = new Array();
+                  arr1 = arr[2].split(".");
+                  url='/mwap/club/club.php?club='+arr1[0];
+              }
+              else if(arr[1]=="newindex"){
+                  if(arr[2]=="kjjy.php"){
+                      url='/mwap/home/index.php';
+                  }
+              }
+              else if(arr[1]=="share"){
+                  if(arr[2]=="fav_show.php"){
+                      url='/mwap/home/collectlist.php';
+                  }
+              }
+          }
+          if (arr.length == 4) {
+              if (arr[1] == "article") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split("_");
+                  url = '/mwap/articlesingle.php?board='+arr[2]+'&article_id='+ arr1[0];
+              }
+              else if (arr[1] == "article0") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split("_");
+                  url = '/mwap/articlesingle.php?board='+arr[2]+'&article_id='+ arr1[0];
+              }
+              else if (arr[1] == "article1") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split("_");
+                  url = '/mwap/articlesingle.php?board='+arr[2]+'&article_id='+ arr1[0];
+              }
+              else if (arr[1] == "article2") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split("_");
+                  url = '/mwap/articlesingle.php?board='+arr[2]+'&article_id='+ arr1[0];
+              }
+              else if (arr[1] == "article3") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split("_");
+                  url = '/mwap/articlesingle.php?board='+arr[2]+'&article_id='+ arr1[0];
+              }
+              else if (arr[1] == "article_t") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split(".");
+                  url = '/mwap/forum/article.php?board=' + arr[2] + '&groupid=' + arr1[0] + '&content_type=all';
+              }
+             else if (arr[1] == "article_t0") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split(".");
+                  url = '/mwap/forum/article.php?board=' + arr[2] + '&groupid=' + arr1[0] + '&content_type=all';
+              }
+              else if (arr[1] == "article_t1") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split(".");
+                  url = '/mwap/forum/article.php?board=' + arr[2] + '&groupid=' + arr1[0] + '&content_type=all';
+              }
+              else if (arr[1] == "article_t2") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split(".");
+                  url = '/mwap/forum/article.php?board=' + arr[2] + '&groupid=' + arr1[0] + '&content_type=all';
+              }
+              else if (arr[1] == "ym_article") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split(".");
+                  url = '/mwap/immigration/article.php?reqtype=column&board=' + arr[2] + '&groupid=' + arr1[0];
+              }
+              else  if (arr[1] == "news_wenzhang") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split(".");
+                  url = '/mwap/news/article.php?news=' + arr[2] + '&groupid=' + arr1[0];
+              }
+              else  if (arr[1] == "clubarticle_t") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split(".");
+                  url = '/mwap/club/article.php?club=' + arr[2] + '&groupid=' + arr1[0] + '&content_type=all';
+              }
+              else  if (arr[1] == "clubarticle_t1") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split(".");
+                  url = '/mwap/club/article.php?club=' + arr[2] + '&groupid=' + arr1[0] + '&content_type=all';
+              }
+              else if (arr[1] == "clubarticle_t2") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split(".");
+                  url = '/mwap/club/article.php?club=' + arr[2] + '&groupid=' + arr1[0] + '&content_type=all';
+              }
+              else  if (arr[1] == "clubarticle") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split("_");
+                  url = '/mwap/articlesingle.php?club='+arr[2]+'&article_id='+arr1[0];
+              }
+              else  if (arr[1] == "clubarticle1") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split("_");
+                  url = '/mwap/articlesingle.php?club='+arr[2]+'&article_id='+arr1[0];
+              }
+              else if (arr[1] == "clubarticle2") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split("_");
+                  url = '/mwap/articlesingle.php?club='+arr[2]+'&article_id='+arr1[0];
+              }
+              else if (arr[1] == "clubarticle3") {
+                  var arr1 = new Array();
+                  arr1 = arr[3].split("_");
+                  url = '/mwap/articlesingle.php?club='+arr[2]+'&article_id='+arr1[0];
+              }
+          }
+      }
+        return url;
+    }
+function GetQueryString(name) //获取指定参数
+{
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)
+            return  unescape(r[2]);
+
+        return null;
+}
+function UrlSearch(arr) //获取所有参数
+{
+        var name,value;
+        var str=location.href;
+        var num=str.indexOf("?")
+        if(num==-1)
+            return null;
+        else {
+        str = str.substr(num + 1);
+        arr = str.split("&");
+        for (var i = 0; i < arr.length; i++) {
+            num = arr[i].indexOf("=");
+            if (num > 0) {
+                name = arr[i].substring(0, num);
+                value = arr[i].substr(num + 1);
+                this[name] = value;
+                         }
+                    }
+                }
+
+}
+function setCookie(name, value, seconds) {
+        seconds = seconds || 0;
+        var expires = "";
+        if (seconds != 0 ) {
+            var date = new Date();
+            date.setTime(date.getTime()+(seconds*1000));
+            expires = "; expires="+date.toGMTString();
+        }
+        document.cookie = name+"="+escape(value)+expires+"; path=/";
+}
+function DelCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() + (-1 * 24 * 60 * 60));
+        var cval = GetCookieValue(name);
+        document.cookie = name + "=" + cval + "; expires=" + exp.toGMTString();
+}
+(function(w){
+ 	var ua = w.navigator.userAgent.toLocaleLowerCase();
+    var matchRe = /iphone|android|symbianos/g;
+ 	if(matchRe.test(ua) && parseInt(getCookieHeader("force_flag")) != 1){
+		//if the force_flag is 0,jump to mwap;and then the force_flage is 1,we will jump to web;
+        var url = GetUrl();
+		w.location.href = url;
+	}
+ })(window);
+
+	</script>
+<title>落地生根(Immigration)版同主题模式 - 未名空间(mitbbs.com)</title>                <title>分类讨论区 - 未名空间 - (mitbbs.com) - 海外华人第一门户</title>
+                <meta name="Keywords" content="未名空间,分类讨论区,热门文章,热门讨论区,热门版面,推荐版面,最新版面">
+                <meta name="Description" content="未名空间(mitbbs.com) 未名空间分类讨论区">
+                <link  rel="stylesheet" type="text/css" href="/unknownspace-yellow.css" charset="gb2312" >
+                <script src="/im/js/im.js" type="text/javascript"></script>
+                <script src="/js/prototype.js" type="text/javascript"></script>
+                <script type="text/javascript" language="javascript" src="/newindex/index.js"></script>
+                <script src="/js/service.js" type="text/javascript"></script>
+            <link rel="stylesheet" type="text/css" href="/header/headerstyle.css" charset="gb2312">
+        </head>
+        <body>
+        <div class="header_all"><!--头部-->
+                        <div class="topbar_wrap"><!--频道导航-->
+                <div class="topbar_cont">
+                    <div class="topbar_nav">
+                        <ul class="topbar_nav_group" style="line-height:24px;"><!--需要将当前频道的链接注释-->
+<!--                            未名论坛，未名移民，未名新闻， 未名俱乐部， 未名点评，分类广告，精华区，未名博客，未名形象秀，未名黄页，未名交友，未名人才-->
+                            <li class="topbar_nav_list"><a class="nav_grey" href="/"> 首页</a></li>
+<!--                            <li class="topbar_nav_list"><a class="nav_grey" href="/weiyan/index.php">微言</a></li>-->
+                            <li class="topbar_nav_list"><a class="nav_grey" href="/mitbbs_bbssec.php"> 未名论坛</a></li>
+                            <li class="topbar_nav_list"><a class="nav_grey" href="/yimin/ymindex.php">未名移民</a></li>
+                                                        <li class="topbar_nav_list"><a class="nav_grey" href="/news/mitbbs_news.php">未名新闻</a></li>
+                                                        <li class="topbar_nav_list"><a class="nav_grey" href="/club/index.php">未名俱乐部</a></li>
+                            <li class="topbar_nav_list" style="display:none"><a class="nav_grey" href="/dianping/user/index.html"> 未名点评</a></li>
+                            <li class="topbar_nav_list"><a class="nav_grey" href="/newindex/classified.php"> 分类广告</a></li>
+                            <li class="topbar_nav_list"><a class="nav_grey" href="/mitbbs_bbsann.php"> 精华区</a></li>
+                            <li class="topbar_nav_list"><a class="nav_grey" href="/pc/pcmain.php"> 未名博客</a></li>
+                            <li class="topbar_nav_list" style="display:none"><a class="nav_grey" href="/virtual_shape/mitbbs_vshape_index.php">未名形象秀</a></li>
+                            <li class="topbar_nav_list" style="display:none"><a class="nav_grey" href="/yellowpage/index.php">未名黄页</a></li>
+                            <li class="topbar_nav_list"><a class="nav_red" href="http://www.jiaoyou8.com/"> 未名交友</a></li>
+                            <li class="topbar_nav_list"><a class="nav_red" href="http://www.rencai8.com/"> 未名人才</a></li>
+                            <li class="topbar_nav_list"><a class="nav_red" href="/jobfair/mitbbs_job_fair.php"> 招聘会</a></li>
+                        </ul>
+                    </div>
+                    <div class="topbar_login">
+                        <ul class="topbar_login_group" style="line-height:24px;">
+                            <!--未登录显示-->
+                                                                <li class="topbar_login_list"><a class="nav_grey" id="tuichu" href="/mitbbs_register1.php">注册</a></li>
+                            <li class="topbar_login_list"><a class="nav_red" id="userid" href="/mitbbs_login.php">登录</a></li>
+                                                            </ul>
+                    </div>
+                </div>
+            </div><!--频道导航-->
+                        <div class="channel_wrap"><!--频道栏-->
+                <div class="channel_cont forum_bb">
+                    <div class="channel_logo"><!--通过更换图片来改变频道logo-->
+                        <div class="logo_box" >
+   <a href=/mitbbs_bbssec.php><img src=/header/img/logo_forum.png alt=未名论坛 width="100%"></a>                                <!--<img src="img/logo_forum.png" alt="未名论坛" width="100%">-->
+                                <!--<img src="img/logo_club.png" alt="未名俱乐部" width="100%">-->
+                                <!--<img src="img/logo_news.png" alt="未名新闻" width="100%">-->
+                                <!--<img src="img/logo_imm.png" alt="未名移民" width="100%">-->
+                                <!--<img src="img/logo_blog.png" alt="未名博客" width="100%">-->
+                                <!--<img src="img/logo_jhq.png" alt="精华区" width="100%">-->
+                                <!--<img src="img/logo_yellowpage.png" alt="未名黄页" width="100%">-->
+                        </div>
+<div class="logo_box"><a href=/AppDownload/wmlt.php><img src=/header/img/app_forum.png alt=未名论坛 width="100%"></a></div>                                <!--<img src="img/app_forum.png" alt="未名论坛" width="100%">-->
+                                <!--<img src="img/app_club.png" alt="未名俱乐部" width="100%">-->
+                                <!--<img src="img/app_news.png" alt="未名新闻" width="100%">-->
+                                <!--<img src="img/app_imm.png" alt="未名移民" width="100%">-->
+                                <!--博客,精华区和黄页没有app下载图片-->
+
+                    </div>
+					                                            <div class="channel_brand_ad">
+                            								<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+								<!-- first_page_320_50 -->
+								<ins class="adsbygoogle" style="display:inline-block;width:320px;height:50px" data-ad-client="ca-pub-9374326915974877" data-ad-slot="6001824015"></ins>
+								<script>
+								(adsbygoogle = window.adsbygoogle || []).push({});
+							    </script>
+							                            <!--                    <a href="#">-->
+                            <!--                        <img src="../img/m.1325236771_2.i0.gif" height="66" width="320"/>-->
+                            <!--                    </a>-->
+                        </div>
+                                </div>
+            </div><!--频道栏-->
+            <div class="search_wrap"><!--搜索--><!--所有二级页面都没有这个div-->
+                <div class="search_cont forum_s_bc"><!--通过更换第二个类来改变频道颜色-->
+                    <div class="search_box"><!--通过更换input的第二个类来改变搜索样式,两个input必须在同一行,不可以换行.-->
+                        <form class="search_form" action="/mitbbs_bbsqry.php" method="post" name="friendform">
+                            <!--<input type="radio"  name="flag" value="1" />昵称
+                            <input type="radio" name="flag" value="2"  checked="checked"/>帐号-->
+                            <select class="search_id"  name="flag">
+                                <option value="3">帐号</option>
+                                <option value="1">昵称</option>
+                            </select>
+                                <input class="search_text forum_search_text" type="search" name="userid" id="user_search" placeholder="查询网友" onclick="javascript:cleartxt3()"><input class="search_btn  forum_search_btn" type="button" name="usersearch_btn" id="usersearch_btn" value="查询网友" onclick="javascript:friendform.submit()">
+                        </form>
+                    </div>
+                    <div class="search_box"><!--本站搜索-->
+                                                    <form name="googleform" action="/mitbbs_search_result.php" id="cse-search-box" target="_blank" accept-charset="utf-8">
+                                <input type="hidden" name="cx"  value="partner-pub-9374326915974877:8447678996" />
+                                <input type="hidden" name="cof" value="FORID:10"/>
+                                <input type="hidden" name="ie"  value="GB2312"  />
+                                <input type="search" name="q" class="search_text forum_search_text" onclick="javascript:cleartxt1()" size="10" placeholder="本站搜索" /><input type="button" name="sa"  value="本站搜索" class="search_btn forum_search_btn"   onclick="if(googleform.q.value=='') {alert('请输入要搜索的文章关键字'); return false;} else googleform.submit();" />
+                            </form>
+                                            </div>
+                    <div class="search_box">
+                        <form class="search_form" action="/mitbbs_bbssel.php" name="searchform_brd" method="post">
+                            <input class="search_text forum_search_text"  type="search" name="board"           id="board_search"    onclick="javascript:cleartxt2()" placeholder="版面搜索"><input class="search_btn forum_search_btn" type="button" name="boardsearch_btn" id="boardsearch_btn" onclick="if(searchform_brd.board.value=='') {alert('请输入要查询的版面名称'); return false;} else searchform_brd.submit();" value="版面搜索">
+                        </form>
+                    </div>
+                                    <div class="online_box">
+                        <span>当前在线人数<a href="/mitbbs_bbsuser.php">14574</a></span>
+                                            </div>
+
+                </div>
+            </div><!--搜索-->
+        </div><!--头部-->
+
+    <center>
+<table width="1000"  border="0" cellspacing="0" cellpadding="0" align="center">
+	<tr>
+		<td width="800"><a href="/newindex/index.php " class="a2">首页</a> - <a href="/mitbbs_bbssec.php" class="a2">分类讨论区</a> - <a href="/bbsboa/1.html" class="a2">海外生活</a> - <a href="/bbsdoc/Immigration.html" class="a2">落地生根版</a>
+		</td>
+		<td width="200" align="right">
+		<A href="/newindex/index.php" class="a2">首页</A>
+	</td>
+</tr></table>
+<table width="1000" align="center">
+	<tr>
+		<td width="85" valign="top">
+	<table width="82" height="202" align="center" border="0" cellpadding="0" cellspacing="0">
+		<tr><td height="19" align="center" class="newskuang1"><a href="http://www.jiaoyou8.com/" class="black_14p_link" target="_blank"><strong>未名交友</strong></a></td></tr>
+		<tr><td height="2"></td></tr>
+		<tr><td align="center" valign="top" class="newskuang2"><table width="68" border="0" align="center" cellpadding="0" cellspacing="0">
+			<tr><td height="5"></td></tr>
+	    			<tr><td height="85" align="center"><a href="http://www.jiaoyou8.com/friends_info?action=user_info&login_id=aautumn" target="_blank"><font color="#C7A4D1"><img src="http://www.jiaoyou8.com//friends_pics/A/AAUTUMN/AAUTUMN_1417401_4d7577a99be6e7ae55a7fffcf8f1ee1d33db46a5_I.jpg" border="0" width="68" height="85"></font></a></td>
+			</tr>
+			<tr><td height="25" align="right">[<a href="http://www.jiaoyou8.com/friends_search?action=latest_upload_pic&gender=female&offset=0" class="a2" target="_blank">更多</a>]</td></tr>
+			<tr><td height="85" align="center"><a href="http://www.jiaoyou8.com/friends_info?action=user_info&login_id=alex的舅舅" target="_blank"><font color="#C7A4D1"><img src="http://www.jiaoyou8.com//friends_pics/A/ALEX-181-196-190-203-190-203/ALEX-181-196-190-203-190-203_1417216_c780f3486a8f0e2b40d79122df55607e4230cb49_I.jpg" border="0" width="68" height="85"></font></a></td></tr>
+			<tr><td height="19" align="right">[<a href="http://www.jiaoyou8.com/friends_search?action=latest_upload_pic&gender=male&offset=0" class="a2" target="_blank">更多</a>]</td></tr>
+			<tr><td height="5"></td></tr>
+		</table></td></tr>
+		<tr><td width="82" align="center"><table width="100%"  border="0" cellpadding="0" cellspacing="0">
+		</table></td></tr>
+	</table>
+	</td>
+	
+	<td valign="top"><table width="915" border="0" cellspacing="0" cellpadding="0">
+	<!--AD StartIng-->
+	<tr>
+		<td width="755" align="center">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">	<script async 
+	src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- board_top -->
+	<ins class="adsbygoogle"
+	style="display:inline-block;width:728px;height:90px"
+	data-ad-client="ca-pub-9374326915974877"
+	data-ad-slot="4893048013"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</table><!--detele by baibing at 20140513-->
+		</td>
+		<td width="153" align="left" valign="top" height="90"><table width="100%"  border="0" cellpadding="0" cellspacing="0">
+		<tr><td align="center" valign="middle"><a href="/yimin/ymindex.php"><img src="/ad_pics/15391_ym.jpg" border="0"></a></td></tr>		</table></td>
+	</tr>
+   <!--start add by baibing at 20140808 for new ad-->
+    <tr><td height="3"></td></tr>
+    <td colspan="2"><table width="100%"  border="0" cellpadding="0" cellspacing="0">
+            </table></td>
+    <!--add by baibing at 20140808 for new ad-->
+	<tr><td height="3"></td></tr>
+	<tr>
+		<td colspan="2"><table width="100%"  border="0" cellpadding="0" cellspacing="0">
+			</table></td>
+	</tr>
+	<!--AD End--> 
+	<tr>
+		<td height="25" colspan="2" align="center" class="news-bg">
+		<span class="black_2">落地生根(Immigration)版同主题模式</span>
+		<br>
+			<center>
+				[<a href="/mitbbs_board_donate.php?board=Immigration" class="news">本版金融中心</a>] 
+				[<a href="/mitbbs_bbsshowvote.php?board=Immigration" class=news>本版投票</a>] 
+				[<a href="/mitbbs_lotterylist.php?board=Immigration" class=news>对赌博彩</a>] 
+				[<a href="/mitbbs_fund_list.php?board=Immigration" class="news">本版基金</a>] 
+				[<a href="/mitbbs_fundlottery_list.php?bid=182" class="news">基金博彩</a>] 
+				[<a href="/mitbbs_bbsbfind.php?board=Immigration" class="news">版内查询</a>] 
+				[<a href="javascript:location.reload()" class="news">刷新</a>]
+			</center>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" class="news-bg"><table width="100%"  border="0" cellspacing="0" cellpadding="0"><tr>
+	<td width="160" height="23" align="center" background="/mitbbs_images/taolun_new_table1.gif" class="black4">版面：
+		<select onchange="location.replace(this.value)">
+		<option value="/bbsdoc2/Immigration_0.html" selected>
+			主题模式</option>
+		<option value="/bbsdoc2/Immigration_3.html" >
+			文章模式</option>
+		<option value="/bbsdoc2/Immigration_2.html" >
+			旧同主题模式</option>
+		<option value="/bbsdoc2/Immigration_7.html">分屏模式</option>
+		</select>
+	</td> 
+ <td width=65 height=23 align=center background=/mitbbs_images/taolun_new_table2.gif ><a href=/bbsdoc2/Immigration_1.html class=news>文摘区</a></td> <td width=65 height=23 align=center background=/mitbbs_images/taolun_new_table2.gif> <a href=/bbsdoc2/Immigration_4.html class=news>保留区</a></td><td width=65 align=center   background=/mitbbs_images/taolun_new_table2.gif> <a href=/bbsdoc3/life.faq/Immigration/5 class=news>精华区</a></td><td width="231" height="23"><a href="../AppDownload/wmlt.php"><img src="../img/app14024.jpg"></a></td>		<td width="300" align="right">
+			<a href="/board_rss/Immigration.xml" class="news" target="_blank">
+				<img src="/mitbbs_images/rss.jpg" border="0"></a>&nbsp;
+		</td>
+	  </tr>
+	</table>	</td>
+	</tr>
+	<form name="board_fav" action="/share/fav_input.php?type=7" method="post"><input type="hidden" name="board_id" value="182"><input type="hidden" name="PREUTMPKEY" value="9A2B5264018AD4ABA4FA929669A01A4B">	</form>
+	<tr>
+		<td colspan="2"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+		<tr> <!-- 剪切一个TD -->
+	    		<form name="form1" action="/mitbbs_bbsdoc.php" method="get" onsubmit="if (this.jumpto.value=='') {alert('请输入文章序号!'); return false;}">
+			<td valign="top" class="jiahui-4"><input type="hidden" name="board" value="Immigration"/><input type="hidden" name="tab" value="0"/>
+			<table width="100%"  border="0" cellspacing="2" cellpadding="0">
+				<tr><td width="12%">
+		<a href="/mitbbs_postdoc.php?board=Immigration&ftype=0"><img src="/mitbbs_images/unknownspace-yellow/postnew.gif" width="72" height="21" border=0 alt="发表文章"></a>				</td>
+				<td width="45%"><marquee class="marquee" onMouseOut="this.start()" onMouseOver="this.stop()" onMouseOut="this.start()" behavior="scroll" direction="left" scrolldelay="200">
+<a href="/contact_us.htm" class="news" target="_blank">将您的链接放在这个位置</a></marquee></td>
+			<td width="43%" align="right">[首页] [上页] [<a href="/bbsdoc1/Immigration_101_0.html" class="news">下页</a>] [<a href="/bbsdoc1/Immigration_41655_0.html" class="news">末页</a>]<input type="submit"  value="跳转到"/> 第 <input type="text" name="jumpto" size="3" onmouseover=this.focus() onfocus=this.select()  > <input type="hidden" name="ftype" value=0> 篇 </td>
+		</tr></table></td></form>
+	    	      <!-- 粘贴一个TD -->
+			<td class="wenzhang_bg">&nbsp;</td>
+		</tr>
+		<tr>
+			<td valign="top" class="taolun_leftright" width="726"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+<tr class="top-bg">
+                  <td width="49" class="black4" align="center">序号</td>
+                  <td width="14" class="black4" align="center">&nbsp;</td>
+                  <td width="417" class="black4" align="center">主题</td>
+                  <td width="86" class="black4" align="center">跟贴/点击</td>
+				  <td width="80" class="black4" align="center">作者</td>
+                  <td width="80" class="black4" align="center">最后回复</td>
+                </tr><tr>					<td colspan="2" align="center" class="black4"><img src="/mitbbs_images/istop.gif" alt="提示" align="absmiddle"> 提示</td>
+						<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t2/Immigration/34028057.html">
+                        ● 关于近几日论战的几点想法                    </a>(5.4k)
+            			</strong>
+			</td>
+            <td align="center">--</td><td><a href="/user_info/HarryAwesome/16a2d2e1b5c136f4321df3191579c12b" class="news">HarryAwesome</a><br><span class="black10">2019-09-21</span></td><td align="center">--</td>		</tr>
+<tr>					<td colspan="2" align="center" class="black4"><img src="/mitbbs_images/istop.gif" alt="提示" align="absmiddle"> 提示</td>
+						<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t2/Immigration/34028341.html">
+                        ● 封神榜                    </a>(8.5k)
+            			</strong>
+			</td>
+            <td align="center">--</td><td><a href="/user_info/rgx/4b787bf893e1d9519259a265d9fc607c" class="news">rgx</a><br><span class="black10">2019-09-23</span></td><td align="center">--</td>		</tr>
+<tr>					<td colspan="2" align="center" class="black4"><img src="/mitbbs_images/istop.gif" alt="提示" align="absmiddle"> 提示</td>
+						<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t2/Immigration/33673035.html">
+                        ● 485 AP/EAD究竟会不会导致H1B失效？ (转载)                    </a>(4.1k)
+            			</strong>
+			</td>
+            <td align="center">--</td><td><a href="/user_info/silangjia/2d3d9d5373f378108cdbd30a3c52bd3e" class="news">silangjia</a><br><span class="black10">2016-03-03</span></td><td align="center">--</td>		</tr>
+<tr>					<td colspan="2" align="center" class="black4"><img src="/mitbbs_images/istop.gif" alt="提示" align="absmiddle"> 提示</td>
+						<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t2/Immigration/34009283.html">
+                        ● 移民版Immigration 2019年报绿统计                    </a>(652b)
+            			</strong>
+			</td>
+            <td align="center">--</td><td><a href="/user_info/Rosefield/f9411fb4b8653438e6f578b112b301e7" class="news">Rosefield</a><br><span class="black10">2019-03-27</span></td><td align="center">--</td>		</tr>
+<tr>					<td colspan="2" align="center" class="black4"><img src="/mitbbs_images/istop.gif" alt="提示" align="absmiddle"> 提示</td>
+						<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t2/Immigration/33761675.html">
+                        ● Letsgreen.org置顶Google 485 Timeline表格的Web网站                    </a>(676b)
+            			</strong>
+			</td>
+            <td align="center">--</td><td><a href="/user_info/dingzj/14b01ece84ea7ad89da9e50f1176145d" class="news">dingzj</a><br><span class="black10">2016-08-07</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">6</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037829.html">
+                        ● 是不是经常有这种sb情况发生                    </a>(162b)
+            			</strong>
+			</td>
+            <td align="center">1/179</td><td><a href="/user_info/LiYaoshi/56ef60b2d42084199f8a50e853fcf182" class="news">LiYaoshi</a><br><span class="black10">2019-12-26</span></td><td align="left"><a href="/user_info/weimingxz" class="news">weimingxz</a><br><span class="black10">12-26 22:05</span></td>		</tr>
+<tr>					<td class="black4" align="center">7</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037851.html">
+                        ● 我父母这种情况还需要再等60天再递交绿卡申请吗                    </a>(137b)
+            			</strong>
+			</td>
+            <td align="center">0/18</td><td><a href="/user_info/xiaoyoutao/5afb795549393ee3001775b244aba6a1" class="news">xiaoyoutao</a><br><span class="black10">2019-12-26</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">8</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037825.html">
+                        ● EB1 485 二次面试通知                    </a>(817b)
+            			</strong>
+			</td>
+            <td align="center">7/323</td><td><a href="/user_info/ASMLA/4337e1b53723daa9a1e077a050ffa639" class="news">ASMLA</a><br><span class="black10">2019-12-26</span></td><td align="left"><a href="/user_info/wildust" class="news">wildust</a><br><span class="black10">12-26 21:26</span></td>		</tr>
+<tr>					<td class="black4" align="center">9</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037615.html">
+                        ● 【2019年12月第16, 17绿】代人报绿                    </a>(568b)
+            			</strong>
+			</td>
+            <td align="center">6/935</td><td><a href="/user_info/yoyo2007/4af42f2538ae50c1ca0f101c6989b4fc" class="news">yoyo2007</a><br><span class="black10">2019-12-20</span></td><td align="left"><a href="/user_info/zhizunbao1" class="news">zhizunbao1</a><br><span class="black10">12-26 19:30</span></td>		</tr>
+<tr>					<td class="black4" align="center">10</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037291.html">
+                        ● 【2019年12月第14,15绿】报绿                    </a>(194b)
+            			</strong>
+			</td>
+            <td align="center">26/1367</td><td><a href="/user_info/dreamtonight/249a4d5678eb2121c47f2444ab01732b" class="news">dreamtonight</a><br><span class="black10">2019-12-17</span></td><td align="left"><a href="/user_info/zhizunbao1" class="news">zhizunbao1</a><br><span class="black10">12-26 19:30</span></td>		</tr>
+<tr>					<td class="black4" align="center">11</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037751.html">
+                        ● 【2019年12月第18绿】爆绿 附timeline                    </a>(506b)
+            			</strong>
+			</td>
+            <td align="center">6/976</td><td><a href="/user_info/xichen03/75c72009ee6a823c3c5e5f9e4be902a6" class="news">xichen03</a><br><span class="black10">2019-12-24</span></td><td align="left"><a href="/user_info/zhizunbao1" class="news">zhizunbao1</a><br><span class="black10">12-26 19:30</span></td>		</tr>
+<tr>					<td class="black4" align="center">12</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037831.html">
+                        ● B2能否延期至18个月                    </a>(134b)
+            			</strong>
+			</td>
+            <td align="center">0/75</td><td><a href="/user_info/nanlaiyan/4afe45f86e07881682b9b7e60e1648ad" class="news">nanlaiyan</a><br><span class="black10">2019-12-26</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">13</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037817.html">
+                        ● 140通过后提交485没有deadline,那么移民局是怎么安排                    </a>(281b)
+            			</strong>
+			</td>
+            <td align="center">2/264</td><td><a href="/user_info/dongliang/d9bc4a2001e7e4c197e612fe35415276" class="news">dongliang</a><br><span class="black10">2019-12-26</span></td><td align="left"><a href="/user_info/Register9876" class="news">Register9876</a><br><span class="black10">12-26 13:02</span></td>		</tr>
+<tr>					<td class="black4" align="center">14</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037773.html">
+                        ● COMBO卡申请只批了AP，没有EAD是怎么回事？                    </a>(97b)
+            			</strong>
+			</td>
+            <td align="center">1/317</td><td><a href="/user_info/maxuantong/c86d0a0ecda79c68f8c7f80c5c417a73" class="news">maxuantong</a><br><span class="black10">2019-12-24</span></td><td align="left"><a href="/user_info/fallwind109" class="news">fallwind109</a><br><span class="black10">12-26 11:00</span></td>		</tr>
+<tr>					<td class="black4" align="center">15</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037815.html">
+                        ● relink/porting到底容易吗？                    </a>(269b)
+            			</strong>
+			</td>
+            <td align="center">0/85</td><td><a href="/user_info/dongliang/d9bc4a2001e7e4c197e612fe35415276" class="news">dongliang</a><br><span class="black10">2019-12-26</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">16</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037755.html">
+                        ● 为啥有人会撤回申请？ (转载)                    </a>(252b)
+            			</strong>
+			</td>
+            <td align="center">5/563</td><td><a href="/user_info/dongliang/d9bc4a2001e7e4c197e612fe35415276" class="news">dongliang</a><br><span class="black10">2019-12-24</span></td><td align="left"><a href="/user_info/huru" class="news">huru</a><br><span class="black10">12-25 20:30</span></td>		</tr>
+<tr>					<td class="black4" align="center">17</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037803.html">
+                        ● Charlie Oppenheim check-in (2019-12-19)                    </a>(3.1k)
+            			</strong>
+			</td>
+            <td align="center">2/1096</td><td><a href="/user_info/rgx/4b787bf893e1d9519259a265d9fc607c" class="news">rgx</a><br><span class="black10">2019-12-25</span></td><td align="left"><a href="/user_info/aqualight" class="news">aqualight</a><br><span class="black10">12-25 15:22</span></td>		</tr>
+<tr>					<td class="black4" align="center">18</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037603.html">
+                        ● 借人气求ebook一章                    </a>(498b)
+            			</strong>
+			</td>
+            <td align="center">2/304</td><td><a href="/user_info/greenclover/5678d681e441f3b4081a629f8d0f026f" class="news">greenclover</a><br><span class="black10">2019-12-20</span></td><td align="left"><a href="/user_info/greenclover" class="news">greenclover</a><br><span class="black10">12-24 23:55</span></td>		</tr>
+<tr>					<td class="black4" align="center">19</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037765.html">
+                        ● 485等待期间 AP过期 着急回国 求办法                    </a>(196b)
+            			</strong>
+			</td>
+            <td align="center">6/436</td><td><a href="/user_info/woody99/361031603fba45320f68a0cc7eef3e27" class="news">woody99</a><br><span class="black10">2019-12-24</span></td><td align="left"><a href="/user_info/absFFT" class="news">absFFT</a><br><span class="black10">12-24 23:18</span></td>		</tr>
+<tr>					<td class="black4" align="center">20</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037729.html">
+                        ● N400入籍党员问题                    </a>(275b)
+            			</strong>
+			</td>
+            <td align="center">6/779</td><td><a href="/user_info/ddforward/77b1bb4f07d00579caca6c4ede672c22" class="news">ddforward</a><br><span class="black10">2019-12-23</span></td><td align="left"><a href="/user_info/damaodamao" class="news">damaodamao</a><br><span class="black10">12-24 21:38</span></td>		</tr>
+<tr>					<td class="black4" align="center">21</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/33854407.html">
+                        ● EB1B CC求bless＋攒人品分享要推荐信的邮件                    </a>(3.3k)
+            			</strong>
+			</td>
+            <td align="center">24/4069</td><td><a href="/user_info/GoodLuck2015/fe9d71d5ae525ae09d4887ad5f9f037a" class="news">GoodLuck2015</a><br><span class="black10">2017-02-16</span></td><td align="left"><a href="/user_info/dimorphism" class="news">dimorphism</a><br><span class="black10">12-24 15:34</span></td>		</tr>
+<tr>					<td class="black4" align="center">22</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037655.html">
+                        ● NSC EB1a 三进宫 0738 RFE后通过                    </a>(2.8k)
+            			</strong>
+			</td>
+            <td align="center">7/909</td><td><a href="/user_info/tocho/19ef9a54752b54db3d6b144c7c6727f9" class="news">tocho</a><br><span class="black10">2019-12-21</span></td><td align="left"><a href="/user_info/tocho" class="news">tocho</a><br><span class="black10">12-23 21:42</span></td>		</tr>
+<tr>					<td class="black4" align="center">23</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037731.html">
+                        ● 关于E-request                    </a>(232b)
+            			</strong>
+			</td>
+            <td align="center">2/244</td><td><a href="/user_info/Staywarm/ef227293a2dc39be4dcb777e4f2cae45" class="news">Staywarm</a><br><span class="black10">2019-12-23</span></td><td align="left"><a href="/user_info/Staywarm" class="news">Staywarm</a><br><span class="black10">12-23 12:05</span></td>		</tr>
+<tr>					<td class="black4" align="center">24</td>
+					<td align="center">
+			; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037735.html">
+                        ● 印度LCA批准人的学历(手把手教你如何分析) (转载)                    </a>(878b)
+            			</strong>
+			</td>
+            <td align="center">0/278</td><td><a href="/user_info/virusHIV/7248f12044a0790cd9933886d17234eb" class="news">virusHIV</a><br><span class="black10">2019-12-23</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">25</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037719.html">
+                        ● 生物技术领域审稿机会                    </a>(100b)
+            			</strong>
+			</td>
+            <td align="center">1/129</td><td><a href="/user_info/xiaomaii/01f76953dcfaf4a2aad68292b1a9000d" class="news">xiaomaii</a><br><span class="black10">2019-12-22</span></td><td align="left"><a href="/user_info/zhoudanlei" class="news">zhoudanlei</a><br><span class="black10">12-23 08:55</span></td>		</tr>
+<tr>					<td class="black4" align="center">26</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037717.html">
+                        ● 请问section 8 voucher算是public charge吗？                    </a>(3b)
+            			</strong>
+			</td>
+            <td align="center">1/219</td><td><a href="/user_info/secure/62161512d8b1b5db826778917e974b21" class="news">secure</a><br><span class="black10">2019-12-22</span></td><td align="left"><a href="/user_info/rgx" class="news">rgx</a><br><span class="black10">12-23 07:00</span></td>		</tr>
+<tr>					<td class="black4" align="center">27</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037703.html">
+                        ● 请教关于申请AP期间离境                    </a>(483b)
+            			</strong>
+			</td>
+            <td align="center">3/351</td><td><a href="/user_info/xugz0212/f88a427eb9f8c04218fdd193884c0ac6" class="news">xugz0212</a><br><span class="black10">2019-12-22</span></td><td align="left"><a href="/user_info/rgx" class="news">rgx</a><br><span class="black10">12-23 06:58</span></td>		</tr>
+<tr>					<td class="black4" align="center">28</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037651.html">
+                        ● 回美证领取通知可以寄回国内吗?                    </a>(331b)
+            			</strong>
+			</td>
+            <td align="center">2/317</td><td><a href="/user_info/shelper/cfed8aa1c04a388fecd4c28ba09fa025" class="news">shelper</a><br><span class="black10">2019-12-21</span></td><td align="left"><a href="/user_info/shelper" class="news">shelper</a><br><span class="black10">12-22 17:23</span></td>		</tr>
+<tr>					<td class="black4" align="center">29</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037663.html">
+                        ● EB1b 内部转组 需要重新申请吗                    </a>(173b)
+            			</strong>
+			</td>
+            <td align="center">2/437</td><td><a href="/user_info/xiling91/629e77ae13faaeec6b999c1d9d2b2a39" class="news">xiling91</a><br><span class="black10">2019-12-21</span></td><td align="left"><a href="/user_info/mgddrxz" class="news">mgddrxz</a><br><span class="black10">12-22 17:00</span></td>		</tr>
+<tr>					<td class="black4" align="center">30</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037701.html">
+                        ● 请教绿卡申请被request for initial evidence                    </a>(714b)
+            			</strong>
+			</td>
+            <td align="center">0/505</td><td><a href="/user_info/xugz0212/f88a427eb9f8c04218fdd193884c0ac6" class="news">xugz0212</a><br><span class="black10">2019-12-22</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">31</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037641.html">
+                        ● AOS interview notice letter 没有收到怎么办？                    </a>(610b)
+            			</strong>
+			</td>
+            <td align="center">2/213</td><td><a href="/user_info/burgerk/0bde68fce78fc3dea75b0b4ebf6c51c0" class="news">burgerk</a><br><span class="black10">2019-12-20</span></td><td align="left"><a href="/user_info/burgerk" class="news">burgerk</a><br><span class="black10">12-22 12:38</span></td>		</tr>
+<tr>					<td class="black4" align="center">32</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037681.html">
+                        ● F2A I-130 过了，I797 form的问题                    </a>(433b)
+            			</strong>
+			</td>
+            <td align="center">2/100</td><td><a href="/user_info/footballwind/008022a457e3af51d9fd344555777973" class="news">footballwind</a><br><span class="black10">2019-12-22</span></td><td align="left"><a href="/user_info/footballwind" class="news">footballwind</a><br><span class="black10">12-22 10:36</span></td>		</tr>
+<tr>					<td class="black4" align="center">33</td>
+					<td align="center">
+			; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037693.html">
+                        ● 排期的EB23中国人需要什么样的改革方案（转自一亩三                    </a>(4.6k)
+            			</strong>
+			</td>
+            <td align="center">0/365</td><td><a href="/user_info/xmfdrspeech3/a71dc702fe1071a4e2c3cd99bffe6131" class="news">xmfdrspeech3</a><br><span class="black10">2019-12-22</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">34</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34004501.html">
+                        ● O1 RFE                    </a>(338b)
+            			</strong>
+			</td>
+            <td align="center">30/4412</td><td><a href="/user_info/elfbear/73d5532e94f599f89014bdf2a6c71e2f" class="news">elfbear</a><br><span class="black10">2019-02-23</span></td><td align="left"><a href="/user_info/damiloveu" class="news">damiloveu</a><br><span class="black10">12-21 21:55</span></td>		</tr>
+<tr>					<td class="black4" align="center">35</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34001501.html">
+                        ● 今天concurrent file了Eb1b 140&amp;485, 真心求祝福                    </a>(315b)
+            			</strong>
+			</td>
+            <td align="center">15/2435</td><td><a href="/user_info/power0811/2ff1e3920a4303964c42228e78055a61" class="news">power0811</a><br><span class="black10">2019-01-30</span></td><td align="left"><a href="/user_info/damiloveu" class="news">damiloveu</a><br><span class="black10">12-21 21:52</span></td>		</tr>
+<tr>					<td class="black4" align="center">36</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037665.html">
+                        ● niw/eb1关于媒体报道                    </a>(335b)
+            			</strong>
+			</td>
+            <td align="center">2/433</td><td><a href="/user_info/lightyyyyy/44a4cc52b12fde534eb6ef83823abc8b" class="news">lightyyyyy</a><br><span class="black10">2019-12-21</span></td><td align="left"><a href="/user_info/chenxin913" class="news">chenxin913</a><br><span class="black10">12-21 21:43</span></td>		</tr>
+<tr>					<td class="black4" align="center">37</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34028057.html">
+                        ● 关于近几日论战的几点想法                    </a>(5.4k)
+            			</strong>
+			</td>
+            <td align="center">20/3402</td><td><a href="/user_info/HarryAwesome/16a2d2e1b5c136f4321df3191579c12b" class="news">HarryAwesome</a><br><span class="black10">2019-09-21</span></td><td align="left"><a href="/user_info/cynthiahuang" class="news">cynthiahuang</a><br><span class="black10">12-21 07:48</span></td>		</tr>
+<tr>					<td class="black4" align="center">38</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037643.html">
+                        ● 最近有人用FR交过485吗？ (转载)                    </a>(451b)
+            			</strong>
+			</td>
+            <td align="center">0/106</td><td><a href="/user_info/creambear/0cb5a5cd70684044b7866c1b29d793d8" class="news">creambear</a><br><span class="black10">2019-12-21</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">39</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037609.html">
+                        ● 懂立法程序的来                    </a>(496b)
+            			</strong>
+			</td>
+            <td align="center">12/840</td><td><a href="/user_info/jinvincible/425cdbf4431e67234cb3b309918f2400" class="news">jinvincible</a><br><span class="black10">2019-12-20</span></td><td align="left"><a href="/user_info/wildust" class="news">wildust</a><br><span class="black10">12-20 17:14</span></td>		</tr>
+<tr>					<td class="black4" align="center">40</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037207.html">
+                        ● I485 Request for initial evidence                    </a>(274b)
+            			</strong>
+			</td>
+            <td align="center">2/859</td><td><a href="/user_info/Staywarm/ef227293a2dc39be4dcb777e4f2cae45" class="news">Staywarm</a><br><span class="black10">2019-12-16</span></td><td align="left"><a href="/user_info/Staywarm" class="news">Staywarm</a><br><span class="black10">12-20 11:50</span></td>		</tr>
+<tr>					<td class="black4" align="center">41</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037397.html">
+                        ● 2020年1月排期及前瞻出炉                    </a>(752b)
+            			</strong>
+			</td>
+            <td align="center">21/6489</td><td><a href="/user_info/rgx/4b787bf893e1d9519259a265d9fc607c" class="news">rgx</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/DanielChai" class="news">DanielChai</a><br><span class="black10">12-19 22:54</span></td>		</tr>
+<tr>					<td class="black4" align="center">42</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037559.html">
+                        ● 2019财年中国EB1-CP发卡统计                    </a>(1.3k)
+            			</strong>
+			</td>
+            <td align="center">10/1792</td><td><a href="/user_info/rgx/4b787bf893e1d9519259a265d9fc607c" class="news">rgx</a><br><span class="black10">2019-12-19</span></td><td align="left"><a href="/user_info/DanielChai" class="news">DanielChai</a><br><span class="black10">12-19 22:41</span></td>		</tr>
+<tr>					<td class="black4" align="center">43</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037577.html">
+                        ● 副申请人485 pending期间能不能同时在两家公司工作？                    </a>(127b)
+            			</strong>
+			</td>
+            <td align="center">2/336</td><td><a href="/user_info/daizp1984/90887896fa5624ab068a539c1269cda9" class="news">daizp1984</a><br><span class="black10">2019-12-19</span></td><td align="left"><a href="/user_info/daizp1984" class="news">daizp1984</a><br><span class="black10">12-19 18:24</span></td>		</tr>
+<tr>					<td class="black4" align="center">44</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037549.html">
+                        ● 主申请人在美国交485，副申请人在国内走CP，可以吗？                    </a>(21b)
+            			</strong>
+			</td>
+            <td align="center">2/409</td><td><a href="/user_info/mapofsoul/f8ee2a9b373552e8affd5553c866d6de" class="news">mapofsoul</a><br><span class="black10">2019-12-19</span></td><td align="left"><a href="/user_info/mapofsoul" class="news">mapofsoul</a><br><span class="black10">12-19 15:57</span></td>		</tr>
+<tr>					<td class="black4" align="center">45</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037551.html">
+                        ● 结婚公证问题                    </a>(271b)
+            			</strong>
+			</td>
+            <td align="center">1/246</td><td><a href="/user_info/kevinethan/c2fdc3b63cfdf43298db47e526b6cc5b" class="news">kevinethan</a><br><span class="black10">2019-12-19</span></td><td align="left"><a href="/user_info/rgx" class="news">rgx</a><br><span class="black10">12-19 15:50</span></td>		</tr>
+<tr>					<td class="black4" align="center">46</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037547.html">
+                        ● 生物医学杂志的审稿机会(smooth muscle cell, microR                    </a>(223b)
+            			</strong>
+			</td>
+            <td align="center">0/105</td><td><a href="/user_info/xjian77/d6cb2e7b0134b632fee4c4df02d0e4fe" class="news">xjian77</a><br><span class="black10">2019-12-19</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">47</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037409.html">
+                        ● eb1排期五年不是梦                    </a>(166b)
+            			</strong>
+			</td>
+            <td align="center">9/3361</td><td><a href="/user_info/gaoyike/bb0b3c41bddf0287ca5e02d677040452" class="news">gaoyike</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/gaoyike" class="news">gaoyike</a><br><span class="black10">12-19 12:53</span></td>		</tr>
+<tr>					<td class="black4" align="center">48</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037499.html">
+                        ● 拿到绿卡可以马上申请回美证到海外分公司工作吗？                    </a>(164b)
+            			</strong>
+			</td>
+            <td align="center">1/605</td><td><a href="/user_info/pattiemeng/a39e63b94a68eba88fe25566ee598d1d" class="news">pattiemeng</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/dsamyu" class="news">dsamyu</a><br><span class="black10">12-19 12:44</span></td>		</tr>
+<tr>					<td class="black4" align="center">49</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036463.html">
+                        ● EB1类排期看形势不容乐观啊                    </a>(150b)
+            			</strong>
+			</td>
+            <td align="center">69/10404</td><td><a href="/user_info/HKKZA/c1aba2dac73f7e76d17f9a650fdb2828" class="news">HKKZA</a><br><span class="black10">2019-12-08</span></td><td align="left"><a href="/user_info/zerocoke" class="news">zerocoke</a><br><span class="black10">12-19 10:58</span></td>		</tr>
+<tr>					<td class="black4" align="center">50</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037245.html">
+                        ● j2 ead 可以无缝对接 h4 ead吗？                    </a>(422b)
+            			</strong>
+			</td>
+            <td align="center">13/678</td><td><a href="/user_info/bobwts/25d6e2ec6c2e2b54f8806e2a048af0fa" class="news">bobwts</a><br><span class="black10">2019-12-17</span></td><td align="left"><a href="/user_info/Nuxiaoguai" class="news">Nuxiaoguai</a><br><span class="black10">12-19 10:06</span></td>		</tr>
+<tr>					<td class="black4" align="center">51</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037439.html">
+                        ● 这个月都没啥人报绿，为啥才前一周？                    </a>(12b)
+            			</strong>
+			</td>
+            <td align="center">4/1679</td><td><a href="/user_info/oziljie/6609e2b1cb9b6e37d75fd003caed1e32" class="news">oziljie</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/josephwangj" class="news">josephwangj</a><br><span class="black10">12-19 09:44</span></td>		</tr>
+<tr>					<td class="black4" align="center">52</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037067.html">
+                        ● EB1B 485pending 超过180天换工作问题                    </a>(351b)
+            			</strong>
+			</td>
+            <td align="center">3/550</td><td><a href="/user_info/a88490775/ec289e812a44188402b8da0a2a018e29" class="news">a88490775</a><br><span class="black10">2019-12-13</span></td><td align="left"><a href="/user_info/liyilui" class="news">liyilui</a><br><span class="black10">12-19 01:31</span></td>		</tr>
+<tr>					<td class="black4" align="center">53</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037387.html">
+                        ● 最近485不让relink是什么回事？                    </a>(83b)
+            			</strong>
+			</td>
+            <td align="center">2/775</td><td><a href="/user_info/state/baf8b518e22011950342cdda4e597876" class="news">state</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/wandererus" class="news">wandererus</a><br><span class="black10">12-18 20:53</span></td>		</tr>
+<tr>					<td class="black4" align="center">54</td>
+					<td align="center">
+			; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037495.html">
+                        ● [合集] 绿卡名额全部要给印度人, 华人最后的希望                    </a>(2.8k)
+            			</strong>
+			</td>
+            <td align="center">0/745</td><td><a href="/user_info/rgx/4b787bf893e1d9519259a265d9fc607c" class="news">rgx</a><br><span class="black10">2019-12-18</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">55</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037391.html">
+                        ● 1月排期出啦                    </a>(115b)
+            			</strong>
+			</td>
+            <td align="center">12/3668</td><td><a href="/user_info/muuc/dd3b8ff04a148ada78ff84efcb2ef781" class="news">muuc</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/a1380" class="news">a1380</a><br><span class="black10">12-18 19:41</span></td>		</tr>
+<tr>					<td class="black4" align="center">56</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037205.html">
+                        ● 请教I-130 receipt                    </a>(226b)
+            			</strong>
+			</td>
+            <td align="center">4/272</td><td><a href="/user_info/themagic12/cf1b34322722d95f7d1ca6ae6e92fc20" class="news">themagic12</a><br><span class="black10">2019-12-16</span></td><td align="left"><a href="/user_info/themagic12" class="news">themagic12</a><br><span class="black10">12-18 19:25</span></td>		</tr>
+<tr>					<td class="black4" align="center">57</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037445.html">
+                        ● 请教一下relink的问题                    </a>(223b)
+            			</strong>
+			</td>
+            <td align="center">1/289</td><td><a href="/user_info/llbehappy/f00211226dacd06a7c63c57731c0548e" class="news">llbehappy</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/rgx" class="news">rgx</a><br><span class="black10">12-18 16:11</span></td>		</tr>
+<tr>					<td class="black4" align="center">58</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037405.html">
+                        ● 按照 1~3 weeks / month 进度，2020 财年。。。。                    </a>(73b)
+            			</strong>
+			</td>
+            <td align="center">0/1509</td><td><a href="/user_info/flyingpumch/ce7a5f185c6f936993f28665fc887aa7" class="news">flyingpumch</a><br><span class="black10">2019-12-18</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">59</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037385.html">
+                        ● 入籍面试的时间地点不方便，好改吗？                    </a>(190b)
+            			</strong>
+			</td>
+            <td align="center">0/224</td><td><a href="/user_info/waxwak/95ec6121928bb125388e5d88b345ce99" class="news">waxwak</a><br><span class="black10">2019-12-18</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">60</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037073.html">
+                        ● EB1B 弱case 瑟瑟发抖中                    </a>(343b)
+            			</strong>
+			</td>
+            <td align="center">7/1799</td><td><a href="/user_info/kyolovesivy/7bb7df1d942fa11ea00389d02d8426f2" class="news">kyolovesivy</a><br><span class="black10">2019-12-13</span></td><td align="left"><a href="/user_info/liyilui" class="news">liyilui</a><br><span class="black10">12-18 13:33</span></td>		</tr>
+<tr>					<td class="black4" align="center">61</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037345.html">
+                        ● 綠卡丟了可以I-400申請公民嗎？                    </a>(94b)
+            			</strong>
+			</td>
+            <td align="center">1/349</td><td><a href="/user_info/dryumen/06de13fe41ff9a56970cfbfd6d7a40c6" class="news">dryumen</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/iloveniw" class="news">iloveniw</a><br><span class="black10">12-18 12:11</span></td>		</tr>
+<tr>					<td class="black4" align="center">62</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037203.html">
+                        ● 新S386据说谈成了                    </a>(2.2k)
+            			</strong>
+			</td>
+            <td align="center">17/5403</td><td><a href="/user_info/aeroro/e73f706c780fe6b7b5e0334d4a2a1834" class="news">aeroro</a><br><span class="black10">2019-12-16</span></td><td align="left"><a href="/user_info/rgx" class="news">rgx</a><br><span class="black10">12-18 11:20</span></td>		</tr>
+<tr>					<td class="black4" align="center">63</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037335.html">
+                        ● 请问uscis圣诞节放几天假？                    </a>(66b)
+            			</strong>
+			</td>
+            <td align="center">1/597</td><td><a href="/user_info/morgan2015/64a078871d69888f425c2fec36a6a774" class="news">morgan2015</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/rgx" class="news">rgx</a><br><span class="black10">12-18 11:12</span></td>		</tr>
+<tr>					<td class="black4" align="center">64</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34014353.html">
+                        ● 长期有效：审稿机会 医学影像 IF ~ 3                    </a>(21b)
+            			</strong>
+			</td>
+            <td align="center">3/302</td><td><a href="/user_info/xichenamoy/81a6e2b57d8fe56bf97bb6eb638ba1f5" class="news">xichenamoy</a><br><span class="black10">2019-05-20</span></td><td align="left"><a href="/user_info/xichenamoy" class="news">xichenamoy</a><br><span class="black10">12-18 10:29</span></td>		</tr>
+<tr>					<td class="black4" align="center">65</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037297.html">
+                        ● 这篇关于s386的报道还蛮平衡的，真不容易                    </a>(192b)
+            			</strong>
+			</td>
+            <td align="center">1/1034</td><td><a href="/user_info/wsyd/23c3db122027ffdb0bf05288f5c3213a" class="news">wsyd</a><br><span class="black10">2019-12-18</span></td><td align="left"><a href="/user_info/LiuQiangDong" class="news">LiuQiangDong</a><br><span class="black10">12-18 07:52</span></td>		</tr>
+<tr>					<td class="black4" align="center">66</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036619.html">
+                        ● EB1B approved, 问题又来了                    </a>(504b)
+            			</strong>
+			</td>
+            <td align="center">10/2280</td><td><a href="/user_info/michael1029/1f297cd0b4332a02535cb93c358aed69" class="news">michael1029</a><br><span class="black10">2019-12-09</span></td><td align="left"><a href="/user_info/damiloveu" class="news">damiloveu</a><br><span class="black10">12-18 01:00</span></td>		</tr>
+<tr>					<td class="black4" align="center">67</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037235.html">
+                        ● 续O1，律师提议重新附上整个材料                    </a>(274b)
+            			</strong>
+			</td>
+            <td align="center">1/317</td><td><a href="/user_info/hopeflymitbb/59d4e3ec33ae0ac8dde10b68fc8fee57" class="news">hopeflymitbb</a><br><span class="black10">2019-12-17</span></td><td align="left"><a href="/user_info/damiloveu" class="news">damiloveu</a><br><span class="black10">12-18 00:55</span></td>		</tr>
+<tr>					<td class="black4" align="center">68</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037285.html">
+                        ● 请教combo卡renew                    </a>(76b)
+            			</strong>
+			</td>
+            <td align="center">0/316</td><td><a href="/user_info/babymandy/5a40d92b7fdb8a73ab6aa958f59550f3" class="news">babymandy</a><br><span class="black10">2019-12-17</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">69</td>
+					<td align="center">
+			&nbsp;@</td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036965.html">
+                        ● 原来中国EB1这么多人走CP，怪不得前进这么慢                    </a>(306b)
+            			</strong>
+			</td>
+            <td align="center">22/4955</td><td><a href="/user_info/absFFT/c68b937d08d737b20584fd6ec79adf01" class="news">absFFT</a><br><span class="black10">2019-12-12</span></td><td align="left"><a href="/user_info/DanielChai" class="news">DanielChai</a><br><span class="black10">12-17 15:21</span></td>		</tr>
+<tr>					<td class="black4" align="center">70</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037169.html">
+                        ● 排期啥时候出啊                    </a>(31b)
+            			</strong>
+			</td>
+            <td align="center">2/2174</td><td><a href="/user_info/vapour/7e79b545f7da9d30c01623d3c2369a57" class="news">vapour</a><br><span class="black10">2019-12-16</span></td><td align="left"><a href="/user_info/firefang" class="news">firefang</a><br><span class="black10">12-17 14:44</span></td>		</tr>
+<tr>					<td class="black4" align="center">71</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037237.html">
+                        ● 面试完面试官什么notice都没给我们正常么                    </a>(578b)
+            			</strong>
+			</td>
+            <td align="center">3/738</td><td><a href="/user_info/GLGC/1ff258e1c1467be70c445d05d5b7c17c" class="news">GLGC</a><br><span class="black10">2019-12-17</span></td><td align="left"><a href="/user_info/cpcs" class="news">cpcs</a><br><span class="black10">12-17 14:34</span></td>		</tr>
+<tr>					<td class="black4" align="center">72</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34035995.html">
+                        ● 绿卡面试律师让我主动交代少先队                    </a>(169b)
+            			</strong>
+			</td>
+            <td align="center">15/2791</td><td><a href="/user_info/oooliviaaa/76eb719f504690574b8b8bfdb5a4d5a5" class="news">oooliviaaa</a><br><span class="black10">2019-12-02</span></td><td align="left"><a href="/user_info/cqwood" class="news">cqwood</a><br><span class="black10">12-17 13:09</span></td>		</tr>
+<tr>					<td class="black4" align="center">73</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036857.html">
+                        ● J1已豁免的情况下可以用之前旧的J1签证出入境吗                    </a>(47b)
+            			</strong>
+			</td>
+            <td align="center">24/1095</td><td><a href="/user_info/Monkeykar/192efab4eb5076a86263c91d6d53ae1e" class="news">Monkeykar</a><br><span class="black10">2019-12-11</span></td><td align="left"><a href="/user_info/SteveMM" class="news">SteveMM</a><br><span class="black10">12-17 11:03</span></td>		</tr>
+<tr>					<td class="black4" align="center">74</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34017259.html">
+                        ● NIW推荐信要求                    </a>(355b)
+            			</strong>
+			</td>
+            <td align="center">12/1374</td><td><a href="/user_info/daisy920904/77206f2d6808ad7e8d275b9fc6223463" class="news">daisy920904</a><br><span class="black10">2019-06-24</span></td><td align="left"><a href="/user_info/dell3000" class="news">dell3000</a><br><span class="black10">12-17 06:23</span></td>		</tr>
+<tr>					<td class="black4" align="center">75</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037211.html">
+                        ● 父母485 Interview Cancelled                    </a>(190b)
+            			</strong>
+			</td>
+            <td align="center">1/415</td><td><a href="/user_info/sanshi29/a13c516a0d1bf00a18405131c2689ad9" class="news">sanshi29</a><br><span class="black10">2019-12-16</span></td><td align="left"><a href="/user_info/rgx" class="news">rgx</a><br><span class="black10">12-17 06:16</span></td>		</tr>
+<tr>					<td class="black4" align="center">76</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037209.html">
+                        ● N 400 form, self-employment or employer or skip i                    </a>(324b)
+            			</strong>
+			</td>
+            <td align="center">0/149</td><td><a href="/user_info/hours16/d9e834c333498cfdfc276179353ea600" class="news">hours16</a><br><span class="black10">2019-12-16</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">77</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037179.html">
+                        ● 转公民期间可以出国吗？                    </a>(66b)
+            			</strong>
+			</td>
+            <td align="center">2/538</td><td><a href="/user_info/twoquestions/46b29d086806825d9ccd6da7df612fb9" class="news">twoquestions</a><br><span class="black10">2019-12-16</span></td><td align="left"><a href="/user_info/china888" class="news">china888</a><br><span class="black10">12-16 17:21</span></td>		</tr>
+<tr>					<td class="black4" align="center">78</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/33998001.html">
+                        ● 485面试后离境有影响吗                    </a>(88b)
+            			</strong>
+			</td>
+            <td align="center">3/1115</td><td><a href="/user_info/ArthurWang/81210cedf914be6e30cdcb5368c233f9" class="news">ArthurWang</a><br><span class="black10">2019-01-01</span></td><td align="left"><a href="/user_info/rgx" class="news">rgx</a><br><span class="black10">12-16 07:51</span></td>		</tr>
+<tr>					<td class="black4" align="center">79</td>
+					<td align="center">
+			O </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037155.html">
+                        ● [合集] 真以为S386会让华人有Free Ride？ 醒醒吧。                    </a>(3.6k)
+            			</strong>
+			</td>
+            <td align="center">0/713</td><td><a href="/user_info/rgx/4b787bf893e1d9519259a265d9fc607c" class="news">rgx</a><br><span class="black10">2019-12-16</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">80</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036865.html">
+                        ● 一月份排期还要等到18号出吗？好烦                    </a>(59b)
+            			</strong>
+			</td>
+            <td align="center">36/6325</td><td><a href="/user_info/cftx/d94e75ff04f05ed63af9f959d31d0a86" class="news">cftx</a><br><span class="black10">2019-12-11</span></td><td align="left"><a href="/user_info/shuzi11" class="news">shuzi11</a><br><span class="black10">12-15 17:16</span></td>		</tr>
+<tr>					<td class="black4" align="center">81</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037003.html">
+                        ● CP数量累计的报告中的CP不是真的CP                    </a>(965b)
+            			</strong>
+			</td>
+            <td align="center">19/1840</td><td><a href="/user_info/aGiraffe/a765c41ab0444b3ed2d98dfb148d5f70" class="news">aGiraffe</a><br><span class="black10">2019-12-13</span></td><td align="left"><a href="/user_info/absFFT" class="news">absFFT</a><br><span class="black10">12-15 09:47</span></td>		</tr>
+<tr>					<td class="black4" align="center">82</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036697.html">
+                        ● 申请绿卡策略求建议                    </a>(507b)
+            			</strong>
+			</td>
+            <td align="center">4/861</td><td><a href="/user_info/majicblazor/a62f22b5c696f514bcd5c5166a2e9a70" class="news">majicblazor</a><br><span class="black10">2019-12-10</span></td><td align="left"><a href="/user_info/wandererus" class="news">wandererus</a><br><span class="black10">12-14 21:41</span></td>		</tr>
+<tr>					<td class="black4" align="center">83</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036813.html">
+                        ● EB1B combo card international travel                    </a>(201b)
+            			</strong>
+			</td>
+            <td align="center">4/864</td><td><a href="/user_info/vincentgreen/d5e741b8e47625ef39c6d9f373fff7e2" class="news">vincentgreen</a><br><span class="black10">2019-12-11</span></td><td align="left"><a href="/user_info/vincentgreen" class="news">vincentgreen</a><br><span class="black10">12-14 16:46</span></td>		</tr>
+<tr>					<td class="black4" align="center">84</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037055.html">
+                        ● 父母绿卡RFE 出生证明的问题                    </a>(681b)
+            			</strong>
+			</td>
+            <td align="center">4/352</td><td><a href="/user_info/wxyhhy/46cebcde3b0050029a2d5c6612f38d62" class="news">wxyhhy</a><br><span class="black10">2019-12-13</span></td><td align="left"><a href="/user_info/china888" class="news">china888</a><br><span class="black10">12-14 08:31</span></td>		</tr>
+<tr>					<td class="black4" align="center">85</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34037079.html">
+                        ● 父母绿卡面试后多长时间可以拿到护照                    </a>(90b)
+            			</strong>
+			</td>
+            <td align="center">0/179</td><td><a href="/user_info/legendud/64ecf144b0bc0b477211e1ed8ae7354b" class="news">legendud</a><br><span class="black10">2019-12-13</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">86</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/33994189.html">
+                        ● EB1B NSC 140 PP APPROVED                    </a>(308b)
+            			</strong>
+			</td>
+            <td align="center">10/1876</td><td><a href="/user_info/caluin/1de84b3a6e5f3974d3aebf444a2ca223" class="news">caluin</a><br><span class="black10">2018-11-19</span></td><td align="left"><a href="/user_info/campsis" class="news">campsis</a><br><span class="black10">12-13 10:09</span></td>		</tr>
+<tr>					<td class="black4" align="center">87</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036863.html">
+                        ● 80多岁的老人来美探亲，是不是不要到大使馆或领事馆                    </a>(33b)
+            			</strong>
+			</td>
+            <td align="center">3/730</td><td><a href="/user_info/newoyster88/9be773e2d63f706a9d5186bb8598e804" class="news">newoyster88</a><br><span class="black10">2019-12-11</span></td><td align="left"><a href="/user_info/newoyster88" class="news">newoyster88</a><br><span class="black10">12-13 09:49</span></td>		</tr>
+<tr>					<td class="black4" align="center">88</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036951.html">
+                        ● 请教I-485 pending期间I-94过期问题                    </a>(225b)
+            			</strong>
+			</td>
+            <td align="center">7/315</td><td><a href="/user_info/weiwindersuo/80a4ed96dda2ac9745d759ed2f91922f" class="news">weiwindersuo</a><br><span class="black10">2019-12-12</span></td><td align="left"><a href="/user_info/weiwindersuo" class="news">weiwindersuo</a><br><span class="black10">12-13 08:20</span></td>		</tr>
+<tr>					<td class="black4" align="center">89</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34034977.html">
+                        ● 说到Yang Annie杨安妮律师 有一事请教                    </a>(424b)
+            			</strong>
+			</td>
+            <td align="center">57/5985</td><td><a href="/user_info/smalladobe/6c275a693a0e1764550078ac710873cf" class="news">smalladobe</a><br><span class="black10">2019-11-15</span></td><td align="left"><a href="/user_info/StevenZhou8" class="news">StevenZhou8</a><br><span class="black10">12-12 09:33</span></td>		</tr>
+<tr>					<td class="black4" align="center">90</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036891.html">
+                        ● DIY-如何将自己的文章与同年、同主题的文章进行比较                    </a>(250b)
+            			</strong>
+			</td>
+            <td align="center">2/312</td><td><a href="/user_info/Julia180105/91d1941852fac9155275d9c79ae51190" class="news">Julia180105</a><br><span class="black10">2019-12-11</span></td><td align="left"><a href="/user_info/StevenZhou8" class="news">StevenZhou8</a><br><span class="black10">12-12 09:32</span></td>		</tr>
+<tr>					<td class="black4" align="center">91</td>
+					<td align="center">
+			m </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036861.html">
+                        ● 宣传一下新出的期刊：experimental results, 欢迎投                    </a>(195b)
+            			</strong>
+			</td>
+            <td align="center">0/403</td><td><a href="/user_info/aw325/ee78f76ae3b4ec3d98a058f8795b34ac" class="news">aw325</a><br><span class="black10">2019-12-11</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">92</td>
+					<td align="center">
+			;@</td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036855.html">
+                        ● 看看卡卡联盟提起裤子不认账的丑态3                    </a>(34b)
+            			</strong>
+			</td>
+            <td align="center">0/771</td><td><a href="/user_info/josephjj/15f1856a552d73672af1f22a040e2357" class="news">josephjj</a><br><span class="black10">2019-12-11</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">93</td>
+					<td align="center">
+			;@</td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036849.html">
+                        ● 看看卡卡联盟提起裤子不认账的丑态5                    </a>(34b)
+            			</strong>
+			</td>
+            <td align="center">0/580</td><td><a href="/user_info/josephjj/15f1856a552d73672af1f22a040e2357" class="news">josephjj</a><br><span class="black10">2019-12-11</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">94</td>
+					<td align="center">
+			;@</td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036847.html">
+                        ● 看看卡卡联盟提起裤子不认账的丑态4                    </a>(34b)
+            			</strong>
+			</td>
+            <td align="center">0/340</td><td><a href="/user_info/josephjj/15f1856a552d73672af1f22a040e2357" class="news">josephjj</a><br><span class="black10">2019-12-11</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">95</td>
+					<td align="center">
+			;@</td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036843.html">
+                        ● 看看卡卡联盟提起裤子不认账的丑态2                    </a>(34b)
+            			</strong>
+			</td>
+            <td align="center">0/458</td><td><a href="/user_info/josephjj/15f1856a552d73672af1f22a040e2357" class="news">josephjj</a><br><span class="black10">2019-12-11</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">96</td>
+					<td align="center">
+			;@</td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036841.html">
+                        ● 看看卡卡联盟提起裤子不认账的丑态                    </a>(78b)
+            			</strong>
+			</td>
+            <td align="center">0/944</td><td><a href="/user_info/josephjj/15f1856a552d73672af1f22a040e2357" class="news">josephjj</a><br><span class="black10">2019-12-11</span></td><td align="center">--</td>		</tr>
+<tr>					<td class="black4" align="center">97</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34034359.html">
+                        ● NIW 拿绿卡时间                    </a>(105b)
+            			</strong>
+			</td>
+            <td align="center">42/4308</td><td><a href="/user_info/pianosarah/8d0b678d01628c5577893980435850b8" class="news">pianosarah</a><br><span class="black10">2019-11-08</span></td><td align="left"><a href="/user_info/EricBao" class="news">EricBao</a><br><span class="black10">12-11 10:26</span></td>		</tr>
+<tr>					<td class="black4" align="center">98</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036379.html">
+                        ● 求助帖 老板要以performance不好开除我，求建议 (转                    </a>(2.7k)
+            			</strong>
+			</td>
+            <td align="center">4/1210</td><td><a href="/user_info/qianjue/1ff5e421fbc2b6e1af09e8586e0be836" class="news">qianjue</a><br><span class="black10">2019-12-07</span></td><td align="left"><a href="/user_info/MITMARS" class="news">MITMARS</a><br><span class="black10">12-11 07:51</span></td>		</tr>
+<tr>					<td class="black4" align="center">99</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036793.html">
+                        ● 副申请人提交485的地址问题                    </a>(152b)
+            			</strong>
+			</td>
+            <td align="center">2/472</td><td><a href="/user_info/CSDN/899c9c094cfd01d3d585cc9ff399080b" class="news">CSDN</a><br><span class="black10">2019-12-10</span></td><td align="left"><a href="/user_info/CSDN" class="news">CSDN</a><br><span class="black10">12-10 17:36</span></td>		</tr>
+<tr>					<td class="black4" align="center">100</td>
+					<td align="center">
+			&nbsp; </td>			<td align="left" height=26>
+			<strong>
+            					<a class="news1" href="/article_t/Immigration/34036543.html">
+                        ● 问两个问题140的 (转载)                    </a>(250b)
+            			</strong>
+			</td>
+            <td align="center">20/781</td><td><a href="/user_info/freelikewind/dc04e04b8914358c33af39c7da2c0a47" class="news">freelikewind</a><br><span class="black10">2019-12-09</span></td><td align="left"><a href="/user_info/rgx" class="news">rgx</a><br><span class="black10">12-10 12:24</span></td>		</tr>
+	
+		</table></td>
+	  <!-- 粘贴位置开始--版面信息 -->
+	<td width="160" class="wenzhang_bg" valign="top">
+		<table width="160"  border="0" cellspacing="0" cellpadding="2">
+			<tr align="center">
+				<td colspan="2" align="center">
+	    <img src="/boardimg/Immigration/boardimg" width="150" border=0><br><br>                </td>
+            </tr>
+                    <tr>
+				<td colspan="2" align="center">				</td>
+			</tr>
+
+   <tr>
+                <td colspan="2" align="center">
+                    本版二维码
+                    <img src="/QRCodeGenerate.php?type=board&board=Immigration&boardid=182" width="120">
+                </td>
+            </tr>
+
+
+			<tr>
+				<td colspan="2"><div align="center">落地生根版<br>(Immigration)</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><div style="text-align:center;padding:4px 0;"><a class="userRank" href="/mitbbs_user_rank.php?board_id=182">[水枪排名]</a></div></td>
+			</tr>
+	
+<!--           modify by baibing -->
+<!--		<tr><td id="weclub_erweima" colspan="2" align="center"></td></tr>-->
+<!--		<script type="text/javascript">get_weclub_erweima_boardorclub('--><!--')</script>-->
+            <!--           modify by baibing -->
+		<tr>
+			<td width="14%"><img src="/mitbbs_images/bm.gif"></td>
+			<td><font size="2" class="a2"><STRONG>版主</STRONG></font></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td class="news" ><a class="news1" href="/user_info/Rosefield">Rosefield</a><br><a class="news1" href="/user_info/telanx">telanx</a><br><a class="news1" href="/user_info/ILM">ILM</a><br><a class="news1" href="/user_info/rgx">rgx</a><br><br><a class="news1" href="/mitbbs_bmaster_list.php">版主任期列表</a></a><br></td>
+		</tr>
+		<tr>
+			<td><img src="/mitbbs_images/online.gif"></td>
+			<td><STRONG>在线/最高 </STRONG></td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td class="news">1119/2940人 </td>
+		</tr>
+		<tr>
+			<td align="center"><img src="/mitbbs_images/postno.gif"></td>
+			<td>主题41754个, 文章378228篇</td>
+		</tr>
+		<tr>
+			<td align="center"><IMG src="/mitbbs_images/model.gif" ></td>
+			<td><a href="/mitbbs_bbsshowtmpl.php?board=Immigration" class="news">发文模板</a></td>
+		</tr>
+		<tr>
+		  <td>&nbsp;</td>
+		  <td><br><a href="/mitbbs_bbsnot.php?board=Immigration" class="news">进版画面</a><br><a href="javascript:void(0)" onclick="document.board_fav.submit()" class="news">添加到我的讨论区</a>
+		  </td>
+		</tr>
+	</table>
+	      <!-- AD Start -->
+	<table width="160"  border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td height="5">&nbsp;</td>
+	</tr>
+	<tr>
+		<td width="160" valign="top" class="jiahui-1">
+		<table border="0" cellpadding="0" cellspacing="0" width="100%">
+			<tr><td align="center"><font size=2 >赞助链接</font><br></td></tr>
+			<tr><td height="5"></td></tr>		<tr>	<td align="center">
+		<!--	
+		<script type="text/javascript">
+		google_ad_client = "ca-pub-9374326915974877";
+		google_ad_slot = "6998627538";
+		google_ad_width = 160;
+		google_ad_height = 600;
+		</script>
+		<script type="text/javascript"
+		src="https://pagead2.googlesyndication.com/pagead/show_ads.js">
+		</script>
+		-->
+		<script async 
+		src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		<!-- board_right -->
+		<ins class="adsbygoogle"
+		style="display:inline-block;width:160px;height:600px"
+		data-ad-client="ca-pub-9374326915974877"
+		data-ad-slot="5778487219"></ins>
+		<script>
+		(adsbygoogle = window.adsbygoogle || []).push({});
+		</script>
+
+		</td></tr>
+<tr><td height="5"></td></tr><tr><td align="center"><a href="http://www.dguolaw.com/?utm_source=MITBBSbanner&utm_medium=MITBBSbanner&utm_campaign=MITBBSbanner" target="_blank" onclick="javascript:staticAd(945,2);" ><img src="/ad_file/M.1414378082_2.Q0.gif" width="160" border="0" alt="www.dguolaw.com"></a></td></tr><script language="javascript">staticAd(945,1);</script><tr><td height="5"></td></tr><tr><td align="center"><a href="http://www.rencai8.com/web/job_content.php?id=33766" target="_blank" onclick="javascript:staticAd(417,2);" ><img src="/ad_file/d/M.1550545935_2.p0.gif" width="160" border="0" alt="南京航空航天大学"></a></td></tr><script language="javascript">staticAd(417,1);</script><tr><td height="5"></td></tr>        <!--detele by baibing at 20140513-->
+<!--		<tr><td align="center"><script type="text/javascript" src="http://ad.wsod.com/embed/d2b88a582927eb1634402fb636420ccb/156.0.js.160x60/${CACHEBUSTER}?click=${CLICK_URL}"></script><NOSCRIPT><a href="${CLICK_URL}http://ad.wsod.com/click/d2b88a582927eb1634402fb636420ccb/156.0.img.160x60/" target="_blank"><img width="160" height="60" border="0" src="http://ad.wsod.com/embed/d2b88a582927eb1634402fb636420ccb/156.0.img.160x60/${CACHEBUSTER}" /></a></NOSCRIPT></td></tr>-->
+<!--		<tr><td height="5"></td></tr>-->
+        <!--detele end by baibing at 20140513-->
+<tr><td height="5"></td></tr>		<tr><td align="center"><a href="http://www.jiaoyou8.com/unknown_friends?action=index&refer_id=mitbbs1" target="_blank"><img src="/ad_pics/jiaoyou8.gif" width="160" border="0" alt="未名交友"></a></td></tr>
+		<tr><td align="center"><a href=/contact_us.htm class="a2"><font size=2>将您的链接放在这儿</font></a></td></tr>
+</table>	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	  <tr>
+		<td align=center><font size=2 ><br>友情链接</font><br><br></td>
+	  </tr>
+
+		</table>
+		</td>
+	</tr>
+	</table></td></tr>
+	<tr>
+			<form name="form1" action="/mitbbs_bbsdoc.php" method="get" onsubmit="if (this.jumpto.value=='') {alert('请输入文章序号!'); return false;}">
+			<td valign="top" class="jiahui-4"><input type="hidden" name="board" value="Immigration"/><input type="hidden" name="tab" value="0"/>
+			<table width="100%"  border="0" cellspacing="2" cellpadding="0">
+				<tr><td width="12%">
+		<a href="/mitbbs_postdoc.php?board=Immigration&ftype=0"><img src="/mitbbs_images/unknownspace-yellow/postnew.gif" width="72" height="21" border=0 alt="发表文章"></a>				</td>
+				<td width="45%"><marquee class="marquee" onMouseOut="this.start()" onMouseOver="this.stop()" onMouseOut="this.start()" behavior="scroll" direction="left" scrolldelay="200">
+<a href="/contact_us.htm" class="news" target="_blank">将您的链接放在这个位置</a></marquee></td>
+			<td width="43%" align="right">[首页] [上页] [<a href="/bbsdoc1/Immigration_101_0.html" class="news">下页</a>] [<a href="/bbsdoc1/Immigration_41655_0.html" class="news">末页</a>]<input type="submit"  value="跳转到"/> 第 <input type="text" name="jumpto" size="3" onmouseover=this.focus() onfocus=this.select()  > <input type="hidden" name="ftype" value=0> 篇 </td>
+		</tr></table></td></form>
+	    	  <!-- 粘贴一个TD -->
+		<td class="wenzhang_bg">&nbsp;</td>
+	</tr></table></td></tr>
+	<tr background="/mitbbs_images/unknownspace-yellow/bg_down.gif"></tr>
+	<tr align="center">
+	<td height="30" colspan="2" class="news-bg">[<a href="#top" class="news">返回顶部</a>][<a href="javascript:location.reload()" class="news">刷新</a>] [<a href="/mitbbs_bbsbfind.php?board=Immigration" class="news">版内查询</a>]</td>
+    	</tr>
+  </tr></table></td></tr>
+  <tr><td colspan="2" align="center">
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">				<script async 
+				src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+				<!-- Board_bottom2 -->
+				<ins class="adsbygoogle"
+				style="display:inline-block;width:728px;height:90px"
+				data-ad-client="ca-pub-9374326915974877"
+				data-ad-slot="1528554167"></ins>
+				<script>
+				(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+				</table>  </td></tr>
+</table>
+
+<table width="1000" align="center" border="0" cellspacing="0" cellpadding="0">
+	<tr><td height="0" align="center" valign="middle" background="/mitbbs_images/unknownspace-yellow/bg_down.gif" bgcolor="#F3F2F1">&nbsp;</td></tr>
+	<tr>
+		<td height="100" align="center" valign="middle" bgcolor="#F3F2F1" ><p><a href="/sitemap.php" class="a2">Site Map</a> - <a href="/contact_us.htm" class="a2">Contact Us</a> - <a href="/tos.htm"  class="a2">Terms and Conditions</a> - <a href="/privacy_policy.htm"  class="a2">Privacy Policy </a><br><br>版权所有，未名空间（mitbbs.com），since 1996</p></td>
+	</tr>
+</table>
+</center>
+<script type="text/javascript" src="/im/js/request.js"/></script>
+
+<script type="text/javascript">
+var  foreign=0;
+//是ca,否则都认为com
+if(top.location.hostname=='www.mitbbs.ca'||top.location.hostname=='mitbbs.ca'){
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));	
+	foreign=2;
+}else{
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	foreign=1;
+}
+
+</script>
+<script type="text/javascript">
+if (foreign!=0){
+	try {		
+		if(foreign==1){			
+			var pageTracker = _gat._getTracker("UA-7425977-1");
+			pageTracker._trackPageview();
+		}else if(foreign==2){			
+			var pageTracker = _gat._getTracker("UA-7425977-2");
+			pageTracker._trackPageview();
+		}		
+	} catch(err) {
+		
+	}
+}// end if 
+
+</script>
+
+</body>
+</html>
